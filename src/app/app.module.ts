@@ -10,11 +10,14 @@ import { InMemoryDataService }               from './in-memory-data.service';
 import { AppComponent }  from './app.component';
 import { routing } from './app.routing';
 
-import { BoardComponent} from './board.component';
-import { CardDetailComponent } from './card-detail.component';
-import { CardListComponent } from './card-list.component';
-import { CardSearchComponent } from './card-search.component';
-import { CardService } from './card.service';
+import { LoginComponent} from './login/login.component';
+import { HeaderComponent} from './header/header.component';
+import { FooterComponent} from './footer/footer.component';
+import { BoardComponent} from './board/board.component';
+import { WorkItemDetailComponent } from './work-item/work-item-detail/work-item-detail.component';
+import { WorkItemListComponent } from './work-item/work-item-list/work-item-list.component';
+import { WorkItemSearchComponent } from './work-item/work-item-search/work-item-search.component';
+import { WorkItemService } from './work-item/work-item.service';
 
 @NgModule({
     imports: [
@@ -24,16 +27,19 @@ import { CardService } from './card.service';
         routing
     ],
     declarations: [
+        LoginComponent,
+        HeaderComponent,
+        FooterComponent,
         AppComponent,
         BoardComponent,
-        CardDetailComponent,
-        CardListComponent,
-        CardSearchComponent
+        WorkItemDetailComponent,
+        WorkItemListComponent,
+        WorkItemSearchComponent
     ],
     providers: [
-        CardService,
-        { provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
-        { provide: SEED_DATA,  useClass: InMemoryDataService }     // in-mem server data
+        WorkItemService
+        // ,{ provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
+        // { provide: SEED_DATA,  useClass: InMemoryDataService }     // in-mem server data
     ],
     bootstrap: [ AppComponent ]
 })

@@ -1,13 +1,18 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import {BoardComponent} from "./board.component";
-import {CardListComponent} from './card-list.component';
-import {CardDetailComponent} from "./card-detail.component";
+import {LoginComponent} from "./login/login.component";
+import {BoardComponent} from "./board/board.component";
+import {WorkItemListComponent} from './work-item/work-item-list/work-item-list.component';
+import {WorkItemDetailComponent} from "./work-item/work-item-detail/work-item-detail.component";
 
 const appRoutes: Routes = [
   {
-    path: 'card-list',
-    component: CardListComponent
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'work-item-list',
+    component: WorkItemListComponent
   },
   {
     path: 'board',
@@ -15,12 +20,12 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/card-list',
+    redirectTo: '/work-item-list',
     pathMatch: 'full'
   },
   {
     path: 'detail/:id',
-    component: CardDetailComponent
+    component: WorkItemDetailComponent
   },
 
 ];
