@@ -8,7 +8,7 @@ import { WorkItem } from './work-item';
 @Injectable()
 export class WorkItemService {
   // private workItemUrl = 'app/workItems';  // URL to web api
-  private workItemUrl = 'http://localhost:8080/api/workitem';  // URL to web api
+  private workItemUrl = 'http://localhost:8080/api/workitems';  // URL to web api
 
   constructor(private http: Http) { }
 
@@ -62,7 +62,6 @@ export class WorkItemService {
     headers.append('Content-Type', 'application/json');
 
     let url = `${this.workItemUrl}/${workItem.id}`;
-    // let url = `${this.workItemUrl}`;
 
     return this.http
       .put(url, JSON.stringify(workItem), {headers: headers})
