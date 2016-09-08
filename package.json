@@ -79,8 +79,8 @@
     "karma-mocha": "1.0.1",
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "1.7.0",    
-    "node-sass": "^3.8.0",
+    "karma-webpack": "1.7.0",
+    "node-sass": "^3.9.3",
     "mocha": "2.5.3",
     "npm-run-all": "2.2.0",
     "null-loader": "^0.1.1",
@@ -103,4 +103,3 @@
     "webpack-merge": "^0.14.0"
   }
 }
-
