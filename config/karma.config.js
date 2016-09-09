@@ -6,7 +6,7 @@ module.exports = function (config) {
 
     frameworks: ['jasmine'],
 
-	exclude: [ 
+	exclude: [
 		'typings/globals'
 	],
 
@@ -37,7 +37,7 @@ module.exports = function (config) {
       noInfo: true
     },
 
-    reporters: ['progress', 'mocha', 'coverage'],
+    reporters: ['kjhtml','progress', 'mocha', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
@@ -49,7 +49,7 @@ module.exports = function (config) {
 			flags: ['--no-sandbox']
 		}
 	},
-    singleRun: true
+    singleRun: false
   };
 
   config.set(_config);
