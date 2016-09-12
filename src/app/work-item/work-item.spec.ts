@@ -10,12 +10,12 @@ import {
 	ResponseOptions
 } from "@angular/http";
 import { MockBackend } from "@angular/http/testing";
+import { WorkItem } from './work-item';
 import { Logger } from '../shared/logger.service';
-
 import { WorkItemService } from "./work-item.service";
 
 
-describe("Work Item Service", () => {
+describe("Work Item Service - ", () => {
 
 	let apiService: WorkItemService;
 	let mockService: MockBackend;
@@ -28,7 +28,8 @@ describe("Work Item Service", () => {
 				MockBackend,
 				{
 					provide: Http,
-					useFactory: (backend: MockBackend, options: BaseRequestOptions) => new Http(backend, options),
+					useFactory: (backend: MockBackend, 
+								 options: BaseRequestOptions) => new Http(backend, options),
 					deps: [MockBackend, BaseRequestOptions]
 				},
 				WorkItemService
@@ -36,18 +37,19 @@ describe("Work Item Service", () => {
 		});
 	});
 
-	beforeEach(inject([WorkItemService, MockBackend], (service: WorkItemService, mock: MockBackend) => {
-		apiService = service;
-		mockService = mock;
-	}))
-
-	it("Should make a get request", async(() => {
-		let response = [
+	beforeEach(inject(
+		[WorkItemService, MockBackend], 
+		(service: WorkItemService, mock: MockBackend) => {
+			apiService = service;
+			mockService = mock;
+		}
+	));
+	let response :WorkItem[] = [
 		  {
 		      "fields": {
-			        "system.assignee": null as any,
+			        "system.assignee": null,
 			        "system.creator": "me",
-			        "system.description": null as any,
+			        "system.description": null,
 			        "system.state": "new",
 			        "system.title": "test1"
 			      },
@@ -55,8 +57,9 @@ describe("Work Item Service", () => {
 		      "type": "system.userstory",
 		      "version": 0
 		    },
-		];
-
+		] as WorkItem[];
+		
+	it("Get work items", async(() => {
 		mockService.connections.subscribe((connection: any) => {
 			connection.mockRespond(new Response(
 				new ResponseOptions({
@@ -64,12 +67,28 @@ describe("Work Item Service", () => {
 					status: 200	
 				})
 			))
-		})
+		});
 
 		apiService.getWorkItems()
 		.then(data => {
 			expect(JSON.stringify(data)).toEqual(JSON.stringify(response));
-		})
+		});
 	}));
+
+	it("Add new work Item", async(() => {
+		mockService.connections.subscribe((connection: any) => {
+			connection.mockRespond(new Response(
+				new ResponseOptions({
+					body: JSON.stringify(response),
+					status: 201
+				})
+			))
+		});
+
+		apiService.create(response[0])
+		.then(data => {
+			expect(JSON.stringify(data)).toEqual(JSON.stringify(response));
+		})
+	}))	
 
 });
