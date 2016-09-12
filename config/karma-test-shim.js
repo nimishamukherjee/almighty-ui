@@ -25,6 +25,13 @@ testing.TestBed.initTestEnvironment(
   browser.platformBrowserDynamicTesting()
 );
 
+/*
+testing.setBaseTestProviders(
+  TEST_BROWSER_DYNAMIC_PLATFORM_PROVIDERS,
+  TEST_BROWSER_DYNAMIC_APPLICATION_PROVIDERS
+);
+*/
+
 var appContext = require.context('../src', true, /\.spec\.ts/);
 
 function requireAll(requireContext) {
