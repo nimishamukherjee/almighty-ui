@@ -1,47 +1,55 @@
 <app-header></app-header>
-<div class="container-fluid container-cards-pf">
-<button class="btn btn-primary" (click)="addWorkItem()">Add New Work Item</button>
-<div *ngIf="addingWorkItem">
-  <work-item-quick-add (close)="close($event)"></work-item-quick-add>
-</div>
-<br /><br />
-<div class="container-fluid">
+<div class="container-fluid screen-min-ht">
 	<div class="list-group list-view-pf list-view-pf-view">
-		<div *ngFor="let workItem of workItems">
-			<div class="list-group-item" (click)="onSelect(workItem)" [class.selected]="workItem === selectedWorkItem">
+		 <div id="workItemList_quickAdd">
+			 <div class="list-group-item supress-hover" (click)="addWorkItem()">
+				<work-item-quick-add (close)="close($event)"></work-item-quick-add>
+			</div>
+		</div>
+		<div *ngFor="let workItem of workItems; let counter = index" id="{{'workItemList_OuterWrap_'+counter}}" class="work-item-list-entry">
+			<div class="list-group-item" (click)="onSelect(workItem)"
+					 [class.selected]="workItem === selectedWorkItem">
 				<div class="list-view-pf-actions">
-					<button class="btn btn-default" (click)="gotoDetails(workItem)">View Details</button>
-					<button class="btn btn-default delete-button" (click)="deleteWorkItem(workItem, $event)">Delete</button>
+					<button class="btn btn-default workItemList_ViewItemDetailBtn" (click)="gotoDetail(workItem)">View Details</button>
+					<button class="btn btn-default delete-button workItemList_deleteListItemBtn" (click)="deleteWorkItem(workItem); $event.stopPropagation()">Delete</button>
 					<div class="dropdown pull-right dropdown-kebab-pf">
-						<button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebabRight" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						<button class="btn btn-link dropdown-toggle workItemList_dropdownKebabBtn" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 							<span class="fa fa-ellipsis-v"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight">
-							<li><a href="#">Delete</a></li>
-							<li><a href="#">Move to backlog</a></li>
-							<li><a href="#">Change Status</a></li>
+							<li><a href="#" class="workItemList_Delete">Delete</a></li>
+							<li><a href="#" class="workItemList_Backlog">Move to backlog</a></li>
+							<li><a href="#" class="workItemList_ChangeStatus">Change Status</a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="list-view-pf-main-info">
-					<div class="list-view-pf-left status">
-						<span class="label" [ngClass]="{'label-warning': workItem.statusCode==0, 'label-primary': workItem.statusCode==1, 'label-success': workItem.statusCode==2 }">{{workItem.status}}</span>
+					<div class="list-view-pf-left">
+						<status-drawer [workItem]="workItem"></status-drawer>						
 					</div>
-					<div class="list-view-pf-left type">
-						<span class='fa' [ngClass]="{'fa-bookmark': workItem.workItemType=='story', 'fa-bug':workItem.workItemType=='bug'}"></span>
+					<div class="list-view-pf-left type workItemList_workItemType">
+						<!--<span class='fa' [ngClass]="{'fa-bookmark': workItem.workItemType=='story', 'fa-bug':workItem.workItemType=='bug'}"></span>-->
+						<span class='fa' [ngClass]="{'fa-wrench': workItem.type=='system.bug',
+											'fa-user': workItem.type=='system.userstory',
+											'fa-globe': workItem.type=='system.feature',
+											'fa-bookmark': workItem.type=='system.experience',
+											'fa-eye': workItem.type=='system.experience',
+											'fa-bank': workItem.type=='system.fundamental',
+											'fa-rocket': workItem.type=='system.valueproposition' }">
+						</span>
 							{{workItem.id}}
-      		</div>
-	      <div class="list-view-pf-body">
-	        <div class="list-view-pf-description">
-	          <div class="list-group-item-heading">
-	             {{workItem.name}}
-	          </div>
-						<div class="list-group-item-text">
-            	{{workItem.description}}
-          	</div>
-	        </div>
-	      </div>
-    	</div>
+					</div>
+					<div class="list-view-pf-body">
+						<div class="list-view-pf-description">
+							<div class="list-group-item-heading workItemList_title">
+								{{workItem.fields['system.title']}}
+							</div>
+							<div class="list-group-item-text workItemList_description">
+								{{workItem.fields['system.description'] ? workItem.fields['system.description'] : "No description available for this work item."}}
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<!--<div *ngIf="workItem.isExpanded" class="work-item-details" >-->
       			<!--{{workItem.name | uppercase}} - {{workItem.description}}-->
@@ -50,6 +58,5 @@
 		</div>
 	</div>
 </div>
-<div class="error" *ngIf="error">{{error}}</div>
-</div>
+<div id="workItemList_Error" class="error" *ngIf="error">{{error}}</div>
 <app-footer></app-footer>

@@ -8,7 +8,7 @@ import { LoginService } from './login.service';
 @Component({
     selector: 'login-form',
     templateUrl: '/login.component.html',
-    styleUrls: ['/login.component.css'],
+    styleUrls: ['/login.component.scss'],
 })
 
 export class LoginComponent {
@@ -23,21 +23,7 @@ export class LoginComponent {
   }
 
   gitSignin() {
-    this.loginService.gitHubSignIn().then(loginStatus => this.checkStatus(loginStatus));
+    this.loginService.gitHubSignIn();
   }
 
-  checkStatus(loginStatus:any){
-    if(loginStatus.status==200)
-    {
-      this.router.navigate(['work-item-list'],{});
-    }else{
-      this.statusCode = loginStatus.status;
-      this.feedbackMessage = loginStatus.responseText;
-      this.showError = true;
-    }
-  }
-
-  closeAlert(){
-    this.showError = false;
-  }
 }

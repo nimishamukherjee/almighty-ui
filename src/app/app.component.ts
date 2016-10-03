@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-
-import '../../public/scss/styles.scss';
-import './rxjs-extensions';
+import { AuthenticationService } from './auth/authentication.service';
 
 @Component({
   selector: 'my-app',
@@ -9,4 +7,8 @@ import './rxjs-extensions';
   styleUrls: ['/app.component.scss']
   })
 export class AppComponent {
+  
+  constructor(auth:AuthenticationService){
+    auth.isLoggedIn();
+  }
 }

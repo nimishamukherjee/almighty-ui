@@ -1,28 +1,32 @@
-<div *ngIf="workItem">
-  <div>
-    <label>fields owner: </label>
-    <input [(ngModel)]="workItem.fields['system.owner']" placeholder="owner" />
+<div class="list-view-pf-body">
+  <div id="workItemQuickAdd_container" class="list-view-pf-description">
+    <div class="list-group-item-heading">
+      <i>Quick Add a WorkItem</i>
+    </div>
+    <div id="workItemQuickAdd_title" class="list-group-item-text margin10">
+      <div class="form-group">
+        <input type="text"
+          [(ngModel)]="workItem.fields['system.title']"
+          (keyup.enter)="save()"
+          (keyup)="checkTitle()"
+          class="form-control"
+          placeholder="Title (mandatory field)" required />
+      </div>
+    </div>
+    <div id="workItemQuickAdd_desc" class="list-group-item-text margin10">
+      <div class="form-group">
+        <input
+          [(ngModel)]="workItem.fields['system.description']"          
+          (keyup.enter)="save()"
+          class="form-control"
+          placeholder="Description" />
+      </div>
+    </div>
+    <div class="list-group-item-text margin10">
+      <div class="form-group">
+        <a id="workItemQuickAdd_saveBtn" class='pficon-add-circle-o' [ngClass]="{'icon-btn': validTitle,'icon-btn-disabled':!validTitle}" (click)="save()"></a>&nbsp;&nbsp;
+        <a id="workItemQuickAdd_goBackBtn" class='pficon-error-circle-o icon-btn' (click)="goBack()"></a>
+      </div>
+    </div>
   </div>
-  <div>
-    <label>fields state: </label>
-    <input [(ngModel)]="workItem.fields['system.state']" placeholder="state" />
-  </div>
-  <div>
-    <label>name: </label>
-    <input [(ngModel)]="workItem.name" placeholder="name" />
-  </div>
-  <div>
-    <label>workItemType: </label>
-    <input [(ngModel)]="workItem.type" placeholder="workItemType" />
-  </div>
-  <div>
-    <label>status: </label>
-    <input [(ngModel)]="workItem.status" placeholder="status" />
-  </div>
-  <div>
-    <label>description: </label>
-    <input [(ngModel)]="workItem.description" placeholder="description" />
-  </div>
-  <button (click)="goBack()">Back</button>
-  <button (click)="save()">Save</button>
 </div>

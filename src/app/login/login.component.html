@@ -1,6 +1,5 @@
-<div class="login-pf">
+<div id="login_wrapper" class="login-pf">
 	<span id="badge">
-  		<img src="../../assets/img/logo.svg" alt=" logo" />
 	</span>
 
   <div class="row">
@@ -11,22 +10,22 @@
     </div><!--/.col-*-->
 
     <div class="col-sm-7 col-md-6 col-lg-5 login">
-      <form class="form-horizontal" role="form">
-					<button (click)="gitSignin()" class="btn btn-primary btn-lg" >
+      <form  id="login_githubLoginForm" class="form-horizontal" role="form">
+					<button (click)="gitSignin()" id="login_githubLoginBtn" class="btn btn-primary btn-lg" >
 						<span class='fa fa-github'></span>
 					Sign In with Github
 				</button>
       </form>
-			<div *ngIf="showError" class="alert alert-danger alert-error">
-				<button type="button" class="close" (click)="closeAlert()">
+			<div *ngIf="showError" class="alert alert-danger alert-error" id="login_githubLoginErrorAlert">
+				<button type="button" id="login_githubLoginErrorAlertBtn" class="close" (click)="closeAlert()">
 					<span class="pficon pficon-close"></span>
 				</button>
 				<span class="pficon pficon-error-circle-o"></span>
 					<strong>Status Code : {{statusCode}}</strong> - {{feedbackMessage}}.
 			</div>
 
-			<div *ngIf="showSuccess" class="alert alert-success alert-dismissable">
-		  	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+			<div *ngIf="showSuccess" class="alert alert-success alert-dismissable" id="login_githubLoginSuccessAlert">
+		  	<button type="button" id="login_githubLoginSuccessAlertBtn" class="close" data-dismiss="alert" aria-hidden="true">
 		    	<span class="pficon pficon-close"></span>
 		  	</button>
 		  	<span class="pficon pficon-ok"></span>
@@ -35,8 +34,6 @@
 
     </div><!--/.col-*-->
     <div class="col-sm-5 col-md-6 col-lg-7 details">
-      <p><strong>Welcome to PatternFly | open interface project!</strong>
-        This is placeholder text, only. Use this area to place any information or introductory message about your application that may be relevant for users. For example, you might include news or information about the latest release of your product here&mdash;such as a version number.</p>
     </div><!--/.col-*-->
   </div><!--/.row-->
 </div>

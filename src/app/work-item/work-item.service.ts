@@ -1,76 +1,65 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from "@angular/http";
+import { Logger } from '../shared/logger.service';
 
 import 'rxjs/add/operator/toPromise';
 
+import { AuthenticationService } from '../auth/authentication.service';
 import { WorkItem } from './work-item';
 
 @Injectable()
 export class WorkItemService {
-  // private workItemUrl = 'app/workItems';  // URL to web api
-  private workItemUrl = 'http://localhost:8080/api/workitems';  // URL to web api
+  private headers = new Headers({'Content-Type': 'application/json'});
+  private workItemUrl = process.env.API_URL+'workitems';  // URL to web api
 
-  constructor(private http: Http) { }
+  constructor(private http: Http,
+              private logger: Logger,
+              private auth:AuthenticationService) {    
+    this.headers.append('Authorization', 'Bearer '+ this.auth.getToken());
+    logger.log("WorkItemService running in " + process.env.ENV + " mode.");
+    logger.log("WorkItemService using url " + this.workItemUrl);
+  }
 
   getWorkItems(): Promise<WorkItem[]> {
     return this.http
-      .get(this.workItemUrl)
+      .get(this.workItemUrl, {headers: this.headers})
       .toPromise()
-      // .then(response => response.json().data as WorkItem[])
-      .then(response => response.json() as WorkItem[])
+      .then(response => process.env.ENV!='inmemory'?response.json() as WorkItem[]:response.json().data as WorkItem[])
       .catch(this.handleError);
   }
 
-  getWorkItem(id: number) {
+  getWorkItem(id: string): Promise<WorkItem> {
     return this.getWorkItems()
-        .then(workItems => workItems.find(workItem => workItem.id === id));
+      .then(workItems => workItems.find(workItem => workItem.id === id));
   }
 
-  save(workItem: WorkItem): Promise<WorkItem>  {
-    if (workItem.id) {
-      return this.put(workItem);
-    }
-    return this.post(workItem);
-  }
-
-  delete(workItem: WorkItem) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    let url = `${this.workItemUrl}/${workItem.id}`;
-
+  delete(workItem: WorkItem): Promise<void> {
+    const url = `${this.workItemUrl}/${workItem.id}`;
     return this.http
-        .delete(url, {headers: headers})
-        .toPromise()
-        .catch(this.handleError);
-  }
-
-  // Add new WorkItem
-  private post(workItem: WorkItem): Promise<WorkItem> {
-    let headers = new Headers({'Content-Type': 'application/json'});
-
-    return this.http
-      .post(this.workItemUrl, JSON.stringify(workItem), {headers: headers})
+      .delete(url, {headers: this.headers, body: ""})
       .toPromise()
-      .then(res => res.json().data)
+      .then(() => null)
       .catch(this.handleError);
   }
 
-  // Update existing WorkItem
-  private put(workItem: WorkItem) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    let url = `${this.workItemUrl}/${workItem.id}`;
-
+  create(workItem: WorkItem): Promise<WorkItem> {
     return this.http
-      .put(url, JSON.stringify(workItem), {headers: headers})
+      .post(this.workItemUrl, JSON.stringify(workItem), {headers: this.headers})
+      .toPromise()
+      .then(response => process.env.ENV!='inmemory'?response.json() as WorkItem:response.json().data as WorkItem)
+      .catch(this.handleError);
+  }
+
+  update(workItem: WorkItem): Promise<WorkItem> {
+    const url = `${this.workItemUrl}/${workItem.id}`;
+    return this.http
+      .put(url, JSON.stringify(workItem), {headers: this.headers})
       .toPromise()
       .then(() => workItem)
       .catch(this.handleError);
   }
 
-  private handleError(error: any) {
+  private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
     return Promise.reject(error.message || error);
   }
