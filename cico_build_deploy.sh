@@ -33,14 +33,18 @@ mkdir -p dist && docker run --detach=true --name=fabric8-planner-builder --user=
 # Build almigty-ui
 docker exec fabric8-planner-builder npm install
 
-## Exec unit tests
 docker exec fabric8-planner-builder npm run test:unit
-
 
 ## Exec functional tests
 #docker exec fabric8-planner-builder ./run_functional_tests.sh
 
 docker exec fabric8-planner-builder npm run build
+docker exec fabric8-planner-builder cd dist npm link
+
+docker exec cd runtime npm install
+docker exec fabric8-planner-builder cd runtime/node_modules/fabric8-planner npm link dist
+
+docker exec fabric8-planner-builder cd runtime npm run build
 docker exec -u root fabric8-planner-builder cp -r /home/fabric8/fabric8-planner/dist /
 
 ## All ok, deploy
