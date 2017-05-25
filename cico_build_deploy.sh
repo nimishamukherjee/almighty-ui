@@ -45,7 +45,7 @@ docker exec fabric8-planner-builder -c bash "cd dist && npm link"
 docker exec fabric8-planner-builder -c bash "cd runtime && npm install"
 docker exec fabric8-planner-builder -c bash "cd runtime/node_modules/fabric8-planner && npm link dist"
 
-docker exec fabric8-planner-builder -c bash  "cd runtime npm run build"
+docker exec fabric8-planner-builder -c bash  "cd runtime && npm run build"
 docker exec -u root fabric8-planner-builder cp -r /home/fabric8/fabric8-planner/dist /
 
 ## All ok, deploy
