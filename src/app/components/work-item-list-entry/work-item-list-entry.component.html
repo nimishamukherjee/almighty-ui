@@ -57,12 +57,12 @@
             tooltip="{{assignee?.attributes?.fullName}}"
             src="{{assignee?.attributes?.imageURL + '&s=23'}}"
             onError="this.src='https://avatars0.githubusercontent.com/u/563119?v=3&s=23'" />
+          <span class="pficon-user not-assigned-user-icon"
+            *ngIf="!workItem.relationships?.assignees?.data?.length"
+            tooltip="Unassigned"
+            placement="left">
+          </span>
         </div>
-        <span class="pficon-user not-assigned-user-icon"
-          *ngIf="!workItem.relationships?.assignees?.data?.length"
-          tooltip="Unassigned"
-          placement="left">
-        </span>
       </div>
       <div class="pull-right margin-left-15"
         tooltip="Open Quick Preview"
