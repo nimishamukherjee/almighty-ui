@@ -6,7 +6,7 @@
 </div>
 <div class="f8-wi__list-entry">
 	<!-- info area -->
-  <div class="list-view-pf-main-info">
+  <div class="list-view-pf-main-info padding-0">
     <div class="list-view-pf-left type f8-wi__list-witype">
       <span class="pull-left">
         {{workItem.attributes['system.number']}}
@@ -27,18 +27,6 @@
                 [routerLink]="[constructUrl(workItem)]"
                 tooltip="Open Detail View"
                 placement="right"></a>
-              <div class="f8-wi__list-parent-info">
-                <div *ngIf="workItem.relationships?.parent?.data">
-                  Child of
-                  <a [routerLink]="[constructUrl(parentWI)]">
-                    {{ parentWI.attributes['system.number'] }}
-                  </a>
-                  <span class="color-grey fa {{parentWI.relationships?.baseType?.data?.attributes?.icon}}"
-                    title="parentWI.relationships?.baseType?.data?.attributes?.name">
-                  </span>
-                  {{ parentWI.attributes['system.title'] }}
-                </div>
-              </div>
             </div>
             <div class="f8-wi__list-description">
               <f8-label [labels]="workItem.relationships?.labels?.data ?
@@ -47,7 +35,7 @@
                 [allowDelete]="false"
                 (onLabelClick)="labelClick($event)"></f8-label>
             </div>
-            <div class="f8-wi__list-description">
+            <div>
               <span class="color-grey pull-left"
                 almIcon
                 [iconType]="workItem.attributes['system.state']"
@@ -58,11 +46,7 @@
         <div class="list-group-item-text hide f8-wi__list-desc">
           {{workItem.attributes['system.description'] ?
           workItem.attributes['system.description'] :
-          "No description available for this work item."}}
-        </div>
-      </div>
     </div>
-    <div class="user-avatar margin-right-15">
       <img
         *ngFor="let assignee of workItem.relationships.assignees.data"
         placement="left"
@@ -79,6 +63,18 @@
       placement="left">
       <a (click)="onDetailPreview($event)"
         class="fa fa-columns f8-action-icon"></a>
+    </div>
+  </div>
+  <div class="f8-wi__list-parent-info">
+    <div *ngIf="workItem.relationships?.parent?.data">
+      Child of
+      <a [routerLink]="[constructUrl(parentWI)]">
+        {{ parentWI.attributes['system.number'] }}
+      </a>
+      <span class="color-grey fa {{parentWI.relationships?.baseType?.data?.attributes?.icon}}"
+        title="parentWI.relationships?.baseType?.data?.attributes?.name">
+      </span>
+      {{ parentWI.attributes['system.title'] }}
     </div>
   </div>
 </div>
