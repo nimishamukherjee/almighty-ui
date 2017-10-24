@@ -86,11 +86,7 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
       actionConfig: {},
       filterConfig: this.filterConfig
     } as ToolbarConfig;
-  allowedFilterKeys: string[] = [
-    'assignee',
-    'area',
-    'label'
-  ];
+  allowedFilterKeys: string[] = [];
   allowedMultipleFilterKeys: string[] = [
     'label'
   ];
@@ -136,10 +132,6 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('[ToolbarPanelComponent] Running in context: ' + this.context);
     this.loggedIn = this.auth.isLoggedIn();
     this.firstVisit = true;
-    // if this is a list view, we allow the wi type to be a filter.
-    if (this.context === 'listview') {
-      this.allowedFilterKeys.push('workitemtype');
-    }
     // we want to get notified on space changes.
     this.spaceSubscription = this.spaces.current.subscribe(space => {
       if (space) {
@@ -150,6 +142,23 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
         this.editEnabled = false;
       }
     });
+    //on the board view - do not show state filter as the lanes are based on state
+    if (this.context === 'boardview') {
+      this.allowedFilterKeys= [
+        'assignee',
+        'creator',
+        'area',
+        'label'
+      ]
+    } else {
+      this.allowedFilterKeys= [
+        'assignee',
+        'creator',
+        'area',
+        'label',
+        'state'
+      ]
+    }
   }
 
   ngAfterViewInit(): void {
@@ -164,6 +173,23 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
     this.eventListeners.push(
       this.filterService.getFilters()
         .subscribe(filters => this.setFilterTypes(filters))
+    );
+
+    // TODO : should be replaced by ngrx/store implementation
+    this.eventListeners.push(
+      this.eventService.labelAdd
+        .subscribe(label => {
+          const filterMap = this.getFilterMap();
+          const index = this.filterConfig.fields.findIndex(i => i.id === 'label');
+          if (index > -1) {
+            if (this.filterConfig.fields[index].queries.length > 0) {
+              this.toolbarConfig.filterConfig.fields[index].queries = [
+                ...this.toolbarConfig.filterConfig.fields[index].queries,
+                ...filterMap.label.datamap([label]).queries
+              ];
+            }
+          }
+        })
     );
   }
 
@@ -341,23 +367,6 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate([], navigationExtras);
   }
 
-
-  onChangeBoardType(type: WorkItemType) {
-    this.currentBoardType = type;
-
-    let params = cloneDeep(this.currentQueryParams);
-    params['workitemtype'] = type.attributes.name;
-
-    // Prepare navigation extra with query params
-    let navigationExtras: NavigationExtras = {
-      queryParams: params,
-      relativeTo: this.route
-    };
-
-    // Navigated to filtered view
-    this.router.navigate([], navigationExtras);
-  }
-
   showTypes() {
     this.showTypesOptions = true;
   }
@@ -403,6 +412,19 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         getvalue: (user) => user.attributes.username
       },
+      creator: {
+        datasource: Observable.combineLatest(this.collaboratorService.getCollaborators(), this.userService.getUser()),
+        datamap: ([users, authUser]) => {
+          if (Object.keys(authUser).length > 0) {
+            users = users.filter(u => u.id !== authUser.id);
+          }
+          return {
+            queries: users.map(user => {return {id: user.id, value: user.attributes.username, imageUrl: user.attributes.imageURL}}),
+            primaryQueries: [{id: authUser.id, value: authUser.attributes.username + ' (me)', imageUrl: authUser.attributes.imageURL}]
+          }
+        },
+        getvalue: (user) => user.attributes.username
+      },
       workitemtype: {
         datasource: this.workItemService.getWorkItemTypes(),
         datamap: (witypes) => {
@@ -412,6 +434,16 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         },
         getvalue: (type) => type.attributes.name
+      },
+      state: {
+        datasource: this.workItemService.getStatusOptions(),
+        datamap: (wistates) => {
+          return {
+            queries: wistates.map(wistate => {return {id: wistate.option, value: wistate.option }}),
+            primaryQueries: []
+          }
+        },
+        getvalue: (type) => type.option
       },
       label: {
         datasource: this.labelService.getLabels().map(d => d as any[]),
@@ -531,4 +563,6 @@ export class ToolbarPanelComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
+
+
 }

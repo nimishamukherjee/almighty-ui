@@ -142,7 +142,7 @@ export class WorkItemService {
     }
   }
 
-  getWorkItems(pageSize: number = 20, filters: any[] = []): Observable<{workItems: WorkItem[], nextLink: string, totalCount?: number | null}> {
+  getWorkItems(pageSize: number = 20, filters: any[] = []): Observable<{workItems: WorkItem[], nextLink: string, totalCount?: number | null, included?: WorkItem[] | null }> {
     if (this._currentSpace) {
       this.workItemUrl = this._currentSpace.links.self + '/workitems';
       let url = this.workItemUrl + '?page[limit]=' + pageSize;
@@ -154,7 +154,8 @@ export class WorkItemService {
           return {
             workItems: resp.json().data as WorkItem[],
             nextLink: resp.json().links.next,
-            totalCount: resp.json().meta ? resp.json().meta.totalCount : 0
+            totalCount: resp.json().meta ? resp.json().meta.totalCount : 0,
+            included: resp.json().included ? resp.json().included as WorkItem[] : [] as WorkItem[]
           };
         }).catch((error: Error | any) => {
           this.notifyError('Getting work items failed.', error);
@@ -166,7 +167,7 @@ export class WorkItemService {
   }
 
   // TODO Filter temp
-  getWorkItems2(pageSize: number = 20, filters: object): Observable<{workItems: WorkItem[], nextLink: string, totalCount?: number | null}> {
+  getWorkItems2(pageSize: number = 20, filters: object): Observable<{workItems: WorkItem[], nextLink: string, totalCount?: number | null, included?: WorkItem[] | null  }> {
     if (this._currentSpace) {
       this.workItemUrl = this._currentSpace.links.self.split('spaces')[0] + 'search';
       let url = this.workItemUrl + '?page[limit]=' + pageSize + '&' + Object.keys(filters).map(k => 'filter['+k+']='+JSON.stringify(filters[k])).join('&');
@@ -175,7 +176,8 @@ export class WorkItemService {
           return {
             workItems: resp.json().data as WorkItem[],
             nextLink: resp.json().links.next,
-            totalCount: resp.json().meta ? resp.json().meta.totalCount : 0
+            totalCount: resp.json().meta ? resp.json().meta.totalCount : 0,
+            included: resp.json().included ? resp.json().included as WorkItem[] : []
           };
         }).catch((error: Error | any) => {
           this.notifyError('Getting work items failed.', error);
@@ -191,13 +193,14 @@ export class WorkItemService {
    * This function is called from next page onwards in the scroll
    * It does pretty much same as the getWorkItems function
    */
-  getMoreWorkItems(url): Observable<{workItems: WorkItem[], nextLink: string | null}> {
+  getMoreWorkItems(url): Observable<{workItems: WorkItem[], nextLink: string | null, included?: WorkItem[] | null }> {
     if (url) {
       return this.http.get(url)
         .map((resp) => {
           return {
             workItems: resp.json().data as WorkItem[],
-            nextLink: resp.json().links.next
+            nextLink: resp.json().links.next,
+            included: resp.json().included ? resp.json().included as WorkItem[] : []
           };
         }).catch((error: Error | any) => {
           this.notifyError('Getting more work items failed.', error);
@@ -209,12 +212,18 @@ export class WorkItemService {
   }
 
 
-  resolveWorkItems(workItems, iterations, users, wiTypes, labels): WorkItem[] {
+  resolveWorkItems(workItems, iterations, users, wiTypes, labels, included: WorkItem[] = []): WorkItem[] {
     let resolvedWorkItems = workItems.map((item) => {
       // put the hasChildren on the root level for the tree
       if (item.relationships.children && item.relationships.children.meta)
         item.hasChildren = item.relationships.children.meta.hasChildren;
-
+        //Resolve parents using included
+      if (included.length > 0 ){
+        if (item.relationships.parent != undefined && item.relationships.parent.data !=undefined) {
+          let wi = included.find(inclwi => inclwi.id === item.relationships.parent.data.id);
+          item.relationships.parent.data = wi;
+        }
+      }
       // Resolve assignnees
       let assignees = item.relationships.assignees.data ? cloneDeep(item.relationships.assignees.data) : [];
       item.relationships.assignees.data = assignees.map((assignee) => {
@@ -236,6 +245,14 @@ export class WorkItemService {
       item.relationships.labels.data = WIlabels.map(label => {
         return labels.find(l => l.id === label.id);
       })
+
+      // Sort labels in alphabetical order
+      item.relationships.labels.data = item.relationships.labels.data.sort(function(labelA, labelB) {
+        let labelAName = labelA.attributes.name.toUpperCase();
+        let labelBName = labelB.attributes.name.toUpperCase();
+        return labelAName.localeCompare(labelBName);
+      });
+
       // Resolve work item types
       let wiType = cloneDeep(item.relationships.baseType.data);
       if (wiType) {
@@ -633,6 +650,7 @@ export class WorkItemService {
               option: item,
             };
           });
+          console.log('availableStates = ', this.availableStates);
           return this.availableStates;
         }).catch((error: Error | any) => {
           this.notifyError('Getting available status options for work item failed.', error);

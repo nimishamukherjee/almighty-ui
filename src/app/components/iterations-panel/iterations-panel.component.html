@@ -5,7 +5,7 @@
 
   <!-- Active iteration -->
     <div class="f8-itr__panel">
-      <div class="f8-itr__panel-hdr f8-itr__panel-hdr--active">
+      <div class="f8-itr__panel-hdr f8-itr__panel-hdr--active nohover">
         <span class="fa fa-check pull-left margin-right-10"
           tooltip="{{sidePanelOpen ? '' : 'Active Iteration'}}"
           placement="right"></span>
@@ -22,7 +22,8 @@
           *ngFor="let iteration of activeIterations"
           [routerLinkActive]="'f8-itr--selected'"
           [routerLink]="[]" [attr.data-id]="iteration.id"
-          [queryParams]="{q: constructURL(iteration.id)}">
+          [queryParams]="{q: constructURL(iteration.id)}"
+          (click)="setGuidedTypeWI(item);">
           <div class="f8-itr__List-subheader">
             <div *ngIf="loggedIn"
               class="dropdown-kebab-pf pull-right dropdown"
@@ -98,7 +99,7 @@
     </div>
     <!-- Nested Iteration Display -->
     <div class="f8-itr__panel">
-      <div class="f8-itr__panel-hdr pointer f8-itr__panel-hdr--active">
+      <div class="f8-itr__panel-hdr f8-itr__panel-hdr--active nohover">
         <div class="f8-itr__add"
           [class.show]="sidePanelOpen"
           [class.hide]="!sidePanelOpen">
@@ -126,6 +127,7 @@
         [itemTemplate]="itemTemplate"
         [items]="treeIterations"
         [loadTemplate]="loadTemplate"
+        (onClick)="handleClick($event)"
         (onActionSelect)="handleAction($event)"
         [class.show]="sidePanelOpen"
         [class.hide]="!sidePanelOpen">
