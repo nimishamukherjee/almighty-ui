@@ -63,10 +63,10 @@ export class IterationEffects {
             iterationName = iterationName.slice(0, 15) + '...';
           }
           try {
-            this.notifications.message({
-              message: `${iterationName} is added.`,
-              type: NotificationType.SUCCESS
-            } as Notification);
+            // this.notifications.message({
+            //   message: `${iterationName} is added.`,
+            //   type: NotificationType.SUCCESS
+            // } as Notification);
           } catch (e) {
             console.log('Iteration is added.')
           }
@@ -102,10 +102,10 @@ export class IterationEffects {
             iterationName = iterationName.slice(0, 15) + '...';
           }
           try {
-            this.notifications.message({
-              message: `${iterationName} is updated.`,
-              type: NotificationType.SUCCESS
-            } as Notification);
+            // this.notifications.message({
+            //   message: `${iterationName} is updated.`,
+            //   type: NotificationType.SUCCESS
+            // } as Notification);
           } catch (e) {
             console.log('Error displaying notification.')
           }

@@ -108,10 +108,10 @@ export class WorkItemEffects {
               // for a normal (not a child) work item creation
               // Add item success notification
               try {
-                this.notifications.message({
-                  message: `New child added.`,
-                  type: NotificationType.SUCCESS
-                } as Notification);
+                // this.notifications.message({
+                //   message: `New child added.`,
+                //   type: NotificationType.SUCCESS
+                // } as Notification);
               } catch (e) {
                 console.log('New child added.');
               }
@@ -130,10 +130,10 @@ export class WorkItemEffects {
             // for a normal (not a child) work item creation
             // Add item success notification
             try {
-              this.notifications.message({
-                message: `Work item is added.`,
-                type: NotificationType.SUCCESS
-              } as Notification);
+              // this.notifications.message({
+              //   message: `Work item is added.`,
+              //   type: NotificationType.SUCCESS
+              // } as Notification);
             } catch (e) {
               console.log('Work item is added.');
             }
@@ -285,10 +285,10 @@ export class WorkItemEffects {
               w.parentID = item.parentID;
             }
             try {
-              this.notifications.message({
-                message: `Workitem updated.`,
-                type: NotificationType.SUCCESS
-              } as Notification);
+              // this.notifications.message({
+              //   message: `Workitem updated.`,
+              //   type: NotificationType.SUCCESS
+              // } as Notification);
             } catch (e) {
               console.log('workitem updated.');
             }

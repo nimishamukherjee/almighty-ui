@@ -68,10 +68,10 @@ export class CustomQueryEffects {
           customQueryName = customQueryName.slice(0, 15) + '...';
         }
         try {
-          this.notifications.message({
-            message: `${customQueryName} added.`,
-            type: NotificationType.SUCCESS
-          } as Notification);
+          // this.notifications.message({
+          //   message: `${customQueryName} added.`,
+          //   type: NotificationType.SUCCESS
+          // } as Notification);
         } catch (e) {
           console.log('Custom query added.')
         }

@@ -45,10 +45,10 @@ export class LabelEffects {
           const lMapper = new LabelMapper();
           let labelUI = lMapper.toUIModel(label);
           try {
-            this.notifications.message({
-              message: `${labelUI.name} is added.`,
-              type: NotificationType.SUCCESS
-            } as Notification);
+            // this.notifications.message({
+            //   message: `${labelUI.name} is added.`,
+            //   type: NotificationType.SUCCESS
+            // } as Notification);
           } catch (e) {
             console.log('label is added');
           }
