@@ -105,16 +105,6 @@ export class WorkItemEffects {
             return this.workItemService.createLink({
               data: linkPayload
             }).map(() => {
-              // for a normal (not a child) work item creation
-              // Add item success notification
-              try {
-                // this.notifications.message({
-                //   message: `New child added.`,
-                //   type: NotificationType.SUCCESS
-                // } as Notification);
-              } catch (e) {
-                console.log('New child added.');
-              }
               const parent = state.workItems.find(w => w.id === parentId);
               if (!parent.childrenLoaded && parent.hasChildren) {
                 return new WorkItemActions.GetChildren(parent);
@@ -127,16 +117,6 @@ export class WorkItemEffects {
               }
             });
           } else {
-            // for a normal (not a child) work item creation
-            // Add item success notification
-            try {
-              // this.notifications.message({
-              //   message: `Work item is added.`,
-              //   type: NotificationType.SUCCESS
-              // } as Notification);
-            } catch (e) {
-              console.log('Work item is added.');
-            }
             if(payload.openDetailPage){
               this.router.navigateByUrl(this.router.url.split('plan')[0] + 'plan/detail/' + wItem.number,
                                         {relativeTo: this.route});
@@ -283,14 +263,6 @@ export class WorkItemEffects {
               w.treeStatus = item.treeStatus;
               w.childrenLoaded = item.childrenLoaded;
               w.parentID = item.parentID;
-            }
-            try {
-              // this.notifications.message({
-              //   message: `Workitem updated.`,
-              //   type: NotificationType.SUCCESS
-              // } as Notification);
-            } catch (e) {
-              console.log('workitem updated.');
             }
             return w;
           })
