@@ -48,6 +48,5 @@ export class PlannerPage extends AppPage {
   async resetState() {
     await this.sidePanel.clickScenarios();
     await $('body').sendKeys(Key.ESCAPE);
-    await this.quickPreview.notificationToast.untilHidden();
   }
 }

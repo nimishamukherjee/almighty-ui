@@ -33,7 +33,6 @@ describe('Quick preview tests: ', () => {
     await planner.createWorkItem(workitemname);
     await planner.workItemList.clickWorkItem(workitemname.title);
     await planner.quickPreview.createNewLabel(c.newLabel);
-    await planner.quickPreview.notificationToast.untilHidden();
     expect(await planner.quickPreview.getLabels()).toContain(c.newLabel);
   });
 
@@ -51,7 +50,6 @@ describe('Quick preview tests: ', () => {
     let title = await planner.createUniqueWorkItem();
     await planner.workItemList.clickWorkItem(title);
     await planner.quickPreview.updateTitle(c.editWorkItemTitle1);
-    await planner.quickPreview.notificationToast.untilHidden();
     expect(await planner.quickPreview.titleInput.getAttribute('value')).toBe('Title Text "<0>"');
   });
 

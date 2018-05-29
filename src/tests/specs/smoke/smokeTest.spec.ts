@@ -156,7 +156,6 @@ describe('Planner Smoke Tests:', () => {
     await planner.header.selectFilter('State', 'resolved');
     await planner.header.saveFilters('My filter');
     await planner.workItemList.overlay.untilHidden();
-    await planner.quickPreview.notificationToast.untilHidden();
     expect(await planner.sidePanel.getMyFiltersList()).toContain('My filter');
     await planner.sidePanel.selectcustomFilterKebab('My filter');
     await planner.sidePanel.deleteCustomQuery.clickWhenReady();
@@ -180,8 +179,6 @@ describe('Planner Smoke Tests:', () => {
 
   it('Create a work item and Open detail page', async() => {
     await planner.quickAdd.addAndOpenWorkItem('new detail workItem','Scenario');
-    await planner.quickPreview.notificationToast.untilCount(1);
-    await planner.quickPreview.notificationToast.untilHidden();
     await planner.detailPage.closeButton.ready();
     expect(await browser.getCurrentUrl()).toContain('detail');
     await planner.detailPage.titleInput.untilTextIsPresentInValue('new detail workItem');

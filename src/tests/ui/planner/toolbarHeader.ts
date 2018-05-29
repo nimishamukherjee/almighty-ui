@@ -36,15 +36,7 @@ export class ToolbarHeader extends BaseElement {
 
   async clickShowTree() {
     await this.ready();
-    while(true) {
-      try {
-        await this.showTree.clickWhenReady();
-        break;
-      } catch(e) {
-        await browser.sleep(1000);
-        await this.notificationToast.untilCount(0);
-      }
-    }
+    await this.showTree.clickWhenReady();
   }
 
   async selectFilter(Label: string, LabelTest: string) {
@@ -62,15 +54,7 @@ export class ToolbarHeader extends BaseElement {
   async clickShowCompleted() {
     await this.ready();
     await this.showCompleted.untilDisplayed();
-    while(true) {
-      try {
-        await this.showCompleted.clickWhenReady();
-        break;
-      } catch(e) {
-        await browser.sleep(1000);
-        await this.notificationToast.untilCount(0);
-      }
-    }
+    await this.showCompleted.clickWhenReady();
   }
 
   async saveFilters(title) {

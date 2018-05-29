@@ -136,7 +136,6 @@ export class WorkItemQuickPreview extends ui.BaseElement {
     await this.iterationDropdown.clickWhenReady();
     await this.iterationDropdown.select(iterationTitle);
     await this.iterationDropdownCloseButton.clickWhenReady();
-    await this.notificationToast.untilCount(1);
   }
 
   async typeaHeadSearch(iterationTitle: string) {
@@ -190,17 +189,8 @@ export class WorkItemQuickPreview extends ui.BaseElement {
     await this.labelDropdownCloseButton.clickWhenReady();
   }
 
-  // Try to click on the close button, if it fails, wait for notification to disappear
   async close() {
-    while(true) {
-      try {
-        await this.closeButton.clickWhenReady();
-        break;
-      } catch(e) {
-        await browser.sleep(1000);
-        await this.notificationToast.untilCount(0);
-      }
-    }
+    await this.closeButton.clickWhenReady();
   }
 
   async getArea() {

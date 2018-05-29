@@ -59,7 +59,6 @@ describe('Work Item datatable list: ', () => {
     await planner.workItemList.overlay.untilHidden();
     await planner.createWorkItem(newWorkItem1);
     expect(await planner.workItemList.hasWorkItem(newWorkItem1.title)).toBeTruthy();
-    await planner.quickPreview.notificationToast.untilHidden();
     await planner.header.clickShowTree();
     expect(await planner.workItemList.hasWorkItem(newWorkItem1.title)).toBeTruthy();
   });
@@ -74,7 +73,6 @@ describe('Work Item datatable list: ', () => {
     expect(await planner.workItemList.hasWorkItem(newWorkItem.title)).toBeTruthy();
     await planner.workItemList.clickWorkItem(newWorkItem.title);
     await planner.quickPreview.changeStateTo('closed');
-    await planner.quickPreview.notificationToast.untilHidden();
     await planner.quickPreview.close();
     await planner.header.clickShowCompleted();
     await planner.workItemList.overlay.untilHidden();
@@ -109,7 +107,6 @@ describe('Work Item datatable list: ', () => {
     expect(await planner.workItemList.hasWorkItem(title)).toBeTruthy();
     await planner.workItemList.workItem(title).clickInlineQuickAdd();
     await planner.createInlineWorkItem(childWorkItem);
-    await planner.quickPreview.notificationToast.untilHidden();
     await browser.sleep(2000);
     expect(await planner.workItemList.hasWorkItem(childWorkItem.title)).toBeTruthy();
     await planner.workItemList.clickWorkItem(title);
@@ -128,7 +125,6 @@ describe('Work Item datatable list: ', () => {
     expect(await planner.workItemList.hasWorkItem(title)).toBeTruthy();
     await planner.workItemList.workItem(title).clickInlineQuickAdd();
     await planner.createInlineWorkItem(childWorkItem);
-    await planner.quickPreview.notificationToast.untilHidden();
     await browser.sleep(2000);
     expect(await planner.workItemList.hasWorkItem(childWorkItem.title)).toBeTruthy();
     await planner.sidePanel.createNewIteration();
@@ -144,7 +140,6 @@ describe('Work Item datatable list: ', () => {
     await planner.sidePanel.clickRequirement();
     await planner.workItemList.workItem(workItemTitle4.title).clickInlineQuickAdd();
     await planner.createInlineWorkItem(workitemname);
-    await planner.quickPreview.notificationToast.untilHidden();
     await planner.sidePanel.clickScenarios();
     await planner.waitUntilUrlContains('typegroup.name:Scenarios');
     await planner.sidePanel.clickRequirement();
@@ -175,8 +170,6 @@ describe('Work Item datatable list: ', () => {
     await planner.createWorkItem(workitem);
     await planner.workItemList.clickWorkItem(workitem.title);
     await planner.quickPreview.changeStateTo('open');
-    await planner.quickPreview.notificationToast.untilCount(1);
-    await planner.quickPreview.notificationToast.untilHidden();
     await planner.quickPreview.close();
     expect(await planner.workItemList.isTitleTextBold(workitem.title)).not.toContain('bold');
   });
