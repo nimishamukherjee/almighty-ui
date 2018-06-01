@@ -1,8 +1,10 @@
 import { BaseElement } from './../base.element';
-import { ElementFinder, browser, $$ } from 'protractor';
+import { ElementFinder, browser, $$, $ } from 'protractor';
 import * as ui from '../../ui';
+import { WorkItemList } from './workitem-list';
 
 export class ToolbarHeader extends BaseElement {
+  workItemList = new WorkItemList($('alm-work-item-list'));
   notificationToast = new ui.BaseElementArray($$('pfng-toast-notification'), 'Notification Toast');
   header = new BaseElement(this.$('.toolbar-pf-view-selector'), 'header div');
   showTree = new BaseElement(this.$('.toolbar-pf-view-selector #showTree'), 'show Tree');
@@ -53,6 +55,7 @@ export class ToolbarHeader extends BaseElement {
     await this.filterDropdown.select(Label);
     await this.selectFilterCondition.clickWhenReady();
     await this.selectFilterCondition.select(LabelTest);
+    await this.workItemList.overlay.untilHidden();
   }
 
   async clickClearAllFilters() {
@@ -77,6 +80,7 @@ export class ToolbarHeader extends BaseElement {
     await this.saveFilter.clickWhenReady();
     await this.titleTextInput.enterText(title);
     await this.saveFilterBtn.clickWhenReady();
+    await this.workItemList.overlay.untilHidden();
   }
 
   async getFilterConditions() {

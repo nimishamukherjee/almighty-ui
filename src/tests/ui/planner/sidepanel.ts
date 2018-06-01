@@ -1,8 +1,10 @@
 import { $, ElementFinder, by} from 'protractor';
 import  *  as ui from './../../ui';
 import * as support from '../../support';
+import { WorkItemList } from './workitem-list';
 
 export class SidePanel extends ui.BaseElement {
+  workItemList = new WorkItemList($('alm-work-item-list'));
   showHideSidePanelButton = new ui.Button(this.$('.f8-sidepanel--toggle'), 'show/hide side panel button');
   scenarioButton = new ui.Clickable(this.element(by.cssContainingText('.f8-group-filter__type', ' Scenarios')),'Side panel Scenario button');
   experienceButton = new ui.Clickable(this.element(by.cssContainingText('.f8-group-filter__type', ' Experiences')),'Side panel Experiences button');
@@ -34,14 +36,17 @@ export class SidePanel extends ui.BaseElement {
 
   async clickScenarios() {
     await this.scenarioButton.clickWhenReady();
+    await this.workItemList.overlay.untilHidden();
   }
 
   async clickExperience() {
     await this.experienceButton.clickWhenReady();
+    await this.workItemList.overlay.untilHidden();
   }
 
   async clickRequirement() {
     await this.requirementsButton.clickWhenReady();
+    await this.workItemList.overlay.untilHidden();
   }
 
   async createNewIteration() {

@@ -12,7 +12,8 @@ export class WorkItemQuickPreview extends ui.BaseElement {
   stateDiv = new ui.BaseElement(this.$('#wi-preview-state'),' State toggle');
   iterationDropdownCloseButton = new ui.Button(this.$('.iteration-dropdown .close-pointer'),'Iteration dropdown close button');
   areaDropdownCloseButton = new ui.Button(this.$('.area-dropdown .close-pointer'),'Area dropdown close button');
-  stateDropdown = new ui.Dropdown(this.$('.dropdown-toggle'), this.$('#wi-status-dropdown'), 'WorkItem State dropdown');
+  stateToggle = new ui.BaseElement(this.$('.dropdown-toggle'), 'State dropdown toggle');
+  stateDropdown = new ui.Dropdown(this.stateToggle, this.$('#wi-status-dropdown'), 'WorkItem State dropdown');
   fullDetailButton = new ui.Clickable(this.$('span.dib'), 'View full details button');
   titleDiv = new ui.BaseElement(this.$('#wi-title-div'), 'Workitem title div');
   titleInput = new ui.TextInput(this.titleDiv.$('textarea'), 'WorkItem Title Input');
@@ -326,5 +327,6 @@ export class WorkItemQuickPreview extends ui.BaseElement {
   async changeStateTo(state: string) {
     await this.stateDropdown.clickWhenReady();
     await this.stateDropdown.select(state);
+    await this.stateToggle.untilTextIsPresent(state);
   }
 }
